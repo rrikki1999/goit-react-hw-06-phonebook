@@ -1,24 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import  ContactForm  from './ContactForm';
 import { ContactList } from './ContactList';
 import { Filter } from './Filter';
+import { useSelector, useDispatch } from "react-redux";
 import { nanoid } from 'nanoid';
+import {addContact, deleteContact, setFilter } from '../redux/actions';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([{ id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },]);
-  const [filter, setFilter] = useState('');
+  // const [contacts, setContacts] = useState([{ id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+  //     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  //     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+  //     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },]);
+  // const [filter, setFilter] = useState('');
+  const contacts = useSelector((state) => state.contacts.contacts);
+  const filter = useSelector((state) => state.contacts.filter);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const stringifiedContacts = localStorage.getItem('contacts');
     const unstringifiedContacts = JSON.parse(stringifiedContacts);
 
     if (unstringifiedContacts) {
-      setContacts(unstringifiedContacts);
+      // setContacts(unstringifiedContacts);
+      dispatch(addContact(unstringifiedContacts));
     }
-  }, []); 
+  }, [dispatch]); 
 
   useEffect(() => {
     const stringifiedContacts = JSON.stringify(contacts);
@@ -36,32 +42,52 @@ export const App = () => {
       return;
     }
 
-    setContacts((prevContacts) => [
-      {
-        id: nanoid(),
-        name,
-        number,
-      },
-      ...prevContacts,
-    ]);
+    // setContacts((prevContacts) => [
+    //   {
+    //     id: nanoid(),
+    //     name,
+    //     number,
+    //   },
+    //   ...prevContacts,
+    // ]);
+    const newContact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+    dispatch(addContact(newContact));
   };
 
   const removeContact = (contactId) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter(({ id }) => id !== contactId)
-    );
+    // setContacts((prevContacts) =>
+    //   prevContacts.filter(({ id }) => id !== contactId)
+    // );
+    dispatch(deleteContact(contactId));
   };
 
   const changeFilter = (e) => {
-    setFilter(e.target.value);
+    // setFilter(e.target.value);
+    dispatch(setFilter(e.target.value))
   };
   
+  // const filterContacts = () => {
+  //   const normalizeFilter = filter.trim().toLowerCase();
+  //   return contacts.filter((contact) =>
+  //     contact.name.toLowerCase().includes(normalizeFilter)
+  //   );
+  // };
   const filterContacts = () => {
-    const normalizeFilter = filter.trim().toLowerCase();
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(normalizeFilter)
-    );
+    const normalizeFilter = filter ? filter.trim().toLowerCase() : '';
+  
+    return contacts
+      ? contacts.filter((contact) =>
+          contact.name && contact.name.toLowerCase().includes(normalizeFilter)
+        )
+      : [];
   };
+  
+  
+  
 
   return (
     <div>
