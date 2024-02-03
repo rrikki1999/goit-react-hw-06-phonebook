@@ -1,19 +1,21 @@
-// import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../redux/actions';
 
 import styles from '../styles/ContactForm.module.css';
-import { useState } from 'react';
 
-
-const ContactForm = ({ addNewContact }) => {
+const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     number: '',
   });
 
+  const dispatch = useDispatch();
+
   const onSubmitForm = (event) => {
     event.preventDefault();
-    addNewContact(formData.name, formData.number);
+    dispatch(addContact(formData.name, formData.number));
     resetForm();
   };
 
@@ -62,63 +64,67 @@ const ContactForm = ({ addNewContact }) => {
 
 export default ContactForm;
 
+// import { nanoid } from 'nanoid';
 
-// export class ContactForm extends Component {
-//   state = {
+// import styles from '../styles/ContactForm.module.css';
+// import { useState } from 'react';
+
+
+// const ContactForm = ({ addNewContact }) => {
+//   const [formData, setFormData] = useState({
 //     name: '',
 //     number: '',
-//   };
+//   });
+  
 
-//   onSubmitForm = (event) => {
+//   const onSubmitForm = (event) => {
 //     event.preventDefault();
-
-//     const form = event.currentTarget;
-//     const { name, number } = form.elements;
-
-//     this.props.addNewContact(name.value, number.value);
-//     this.resetForm();
+//     addNewContact(formData.name, formData.number);
+//     resetForm();
 //   };
 
-//   handleChange = (e) => {
+//   const handleChange = (e) => {
 //     const { name, value } = e.target;
-//     this.setState({ [name]: value });
+//     setFormData((prevData) => ({ ...prevData, [name]: value }));
 //   };
 
-//   resetForm = () => {
-//     this.setState({ name: '', number: '' });
+//   const resetForm = () => {
+//     setFormData({ name: '', number: '' });
 //   };
 
-//   render() {
-//     const { name, number } = this.state;
-//     return (
-//       <form className={styles.contactForm} action="" onSubmit={this.onSubmitForm}>
-//         <label htmlFor={nanoid()} className={styles.label}>
-//           Name
-//           <input
-//             className={styles.input}
-//             type="text"
-//             name="name"
-//             value={name}
-//             onChange={this.handleChange}
-//             required
-//           />
-//         </label>
-//         <label htmlFor={nanoid()} className={styles.label}>
-//           Number
-//           <input
-//             className={styles.input}
-//             type="tel"
-//             name="number"
-//             value={number}
-//             onChange={this.handleChange}
-//             required
-//           />
-//         </label>
+//   const { name, number } = formData;
 
-//         <button className={styles.addButton} type="submit">
-//           add contact
-//         </button>
-//       </form>
-//     );
-//   }
-// }
+//   return (
+//     <form className={styles.contactForm} onSubmit={onSubmitForm}>
+//       <label htmlFor={nanoid()} className={styles.label}>
+//         Name
+//         <input
+//           className={styles.input}
+//           type="text"
+//           name="name"
+//           value={name}
+//           onChange={handleChange}
+//           required
+//         />
+//       </label>
+//       <label htmlFor={nanoid()} className={styles.label}>
+//         Number
+//         <input
+//           className={styles.input}
+//           type="tel"
+//           name="number"
+//           value={number}
+//           onChange={handleChange}
+//           required
+//         />
+//       </label>
+
+//       <button className={styles.addButton} type="submit">
+//         add contact
+//       </button>
+//     </form>
+//   );
+// };
+
+// export default ContactForm;
+

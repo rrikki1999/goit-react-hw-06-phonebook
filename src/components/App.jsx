@@ -33,9 +33,14 @@ export const App = () => {
   
 
   const addNewContact = (name, number) => {
-    const isInContacts = contacts.some(
-      (contact) => name.toLowerCase() === contact.name.toLowerCase()
-    );
+    // const isInContacts = contacts.some(
+    //   (contact) => name.toLowerCase() === contact.name.toLowerCase()
+    // );
+    const isInContacts = contacts
+    ? contacts.some(
+        (contact) => name.toLowerCase() === contact.name.toLowerCase()
+      )
+    : false;
 
     if (isInContacts) {
       alert(`${name} is already in contacts`);
