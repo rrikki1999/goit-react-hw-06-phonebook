@@ -1,19 +1,28 @@
-export const ContactList = ({ contacts, onRemoveContact }) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from '../redux/actions';
+
+export const ContactList = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.contacts);
+  const filter = useSelector(state => state.contacts.filter);
+
+  const filterContacts = contacts.filter(({ name }) =>
+    name.toLowerCase().includes(filter.trim().toLowerCase())
+  );
+
   return (
     <>
       <ul>
-        {contacts.map(item => {
+        {filterContacts.map(item => {
           return (
-            <li key={item.id} >
-              <p >
-                {item.name}:{' '}
-                <span >{item.number}</span>
+            <li key={item.id}>
+              <p>
+                {item.name}: <span>{item.number}</span>
               </p>
               <button
                 type="button"
                 name="delete"
-                
-                onClick={() => onRemoveContact(item.id)}
+                onClick={() => dispatch(deleteContact(item.id))}
               >
                 delete
               </button>

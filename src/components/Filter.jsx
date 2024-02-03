@@ -1,35 +1,24 @@
-
 import { nanoid } from 'nanoid';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilter } from '../redux/filterSlice';
 
-export const Filter = ({ value, onChangeFilter }) => {
-  
-    return (
-      <label htmlFor={nanoid()}>
-        Find contacts by name
-        <input
-          value={value}
-          type="text"
-          placeholder="find contact"
-          onChange={onChangeFilter}
-        />
-      </label>
-    );
-  }
+export const Filter = () => {
+  const dispatch = useDispatch();
+  const value = useSelector(store => store.contacts.filter);
 
+  const changeFilter = e => {
+    dispatch(setFilter(e.target.value));
+  };
 
-// export class Filter extends Component {
-//   render() {
-//     const { value, onChangeFilter } = this.props;
-//     return (
-//       <label htmlFor={nanoid()}>
-//         Find contacts by name
-//         <input
-//           value={value}
-//           type="text"
-//           placeholder="find contact"
-//           onChange={onChangeFilter}
-//         />
-//       </label>
-//     );
-//   }
-// }
+  return (
+    <label htmlFor={nanoid()}>
+      Find contacts by name
+      <input
+        value={value}
+        type="text"
+        placeholder="find contact"
+        onChange={changeFilter}
+      />
+    </label>
+  );
+};

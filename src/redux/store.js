@@ -1,25 +1,37 @@
-// Виконай рефакторинг коду застосунку «Книга контактів», 
-// додавши управління станом за допомогою бібліотеки Redux Toolkit. 
-// Нехай Redux-стан виглядає наступним чином.
-// {
-//   contacts: [],
-//   filter: ""
-// }
-// Створи сховище з configureStore()
-// Використовуй функцію createSlice()
-// Створи дії збереження та видалення контакту, а також оновлення фільтра
-
-// Зв'яжи React-компоненти з Redux-логікою за допомогою хуків бібліотеки react-redux.
-// Використай бібліотеку Redux Persist для збереження масиву контактів у локальному сховищі
-
 import { configureStore } from "@reduxjs/toolkit";
-// import { contactsReducer, filtersReducer } from "./contactsReducer";
 import contactsReducer from "./contactsSlice";
 import filterReducer from "./filterSlice";
+import storage from 'redux-persist/lib/storage';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 
-export const store = configureStore({
+const contactsConfig = {
+  key: 'contacts',
+  storage,
+  whitelist: ['contacts'],
+}
+
+ export const store = configureStore({
   reducer: {
-    contacts: contactsReducer,
-    filters: filterReducer,
+    contacts: persistReducer(contactsConfig, contactsReducer),
+    filter: filterReducer,
   },
-});
+  middleware: getDefaultMiddleware =>
+  getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+}),});
+
+export const persistor = persistStore(store);
+
+
+
