@@ -7,14 +7,15 @@ export const ContactList = () => {
   const filter = useSelector(state => state.contacts.filter || '');
 
 
-  const filterContacts = contacts.filter(({ name }) =>
+  const filterContacts =() => contacts.filter(({ name }) =>
     name.toLowerCase().includes(filter.trim().toLowerCase())
+    
   );
 
   return (
     <>
       <ul>
-        {filterContacts.map(item => {
+        {filterContacts().map(item => {
           return (
             <li key={item.id}>
               <p>
